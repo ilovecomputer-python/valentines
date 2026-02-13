@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Valentine ❤️</title>
+    <style>
+        :root {
+            --pink-light: #FFF5F5;
+            --pink-hot: #FF4D6D;
+            --text-dark: #590D22;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: var(--pink-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .container {
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        #main-gif {
+            width: 100%;
+            max-width: 250px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: var(--text-dark);
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            height: 50px; /* Menjaga layout saat tombol No pindah */
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        #yesBtn {
+            background-color: var(--pink-hot);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+        }
+
+        #noBtn {
+            background-color: #808080;
+            color: white;
+            position: absolute; /* Dibutuhkan untuk logika jumping */
+        }
+
+        /* Efek Hati Berjatuhan */
+        .heart {
+            position: fixed;
+            top: -1vh;
+            transform: translateY(0);
+            animation: fall 3s linear forwards;
+            color: var(--pink-hot);
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(105vh);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img id="main-gif" src="index/cutie.jpg" alt="Please">
+        <h1 id="question">Will you be my Valentine? 🌹</h1>
+        
+        <div class="btn-group">
+            <button id="yesBtn">Yes!</button>
+            <button id="noBtn">No</button>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const mainGif = document.getElementById('main-gif');
+        const question = document.getElementById('question');
+
+        // 1. Logika Tombol "No" Kabur (Dramatis)
+        const moveNoButton = () => {
+            // Padding agar tidak terlalu mepet ke pinggir layar
+            const padding = 50;
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding);
+
+            noBtn.style.left = `${Math.max(padding, x)}px`;
+            noBtn.style.top = `${Math.max(padding, y)}px`;
+        };
+
+        noBtn.addEventListener('mouseover', moveNoButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Mencegah klik di mobile
+            moveNoButton();
+        });
+
+        // 2. Logika Saat Klik "Yes"
+        yesBtn.addEventListener('click', () => {
+            // Ganti Teks & GIF Selebrasi
+            question.innerHTML = "Yeyy lovv uu adikkk ❤️<br><small>Happy Valentine</small>";
+            mainGif.src = "index/valentines.jpg"; // GIF Selebrasi
+            
+            // Hapus tombol No
+            noBtn.style.display = 'none';
+            yesBtn.style.display = 'none';
+
+            // Jalankan hujan hati
+            startHeartRain();
+        });
+
+        // 3. Efek Hujan Hati (Confetti-like)
+        function startHeartRain() {
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+                heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+                document.body.appendChild(heart);
+
+                // Hapus elemen hati setelah jatuh agar tidak membebani memori
+                setTimeout(() => {
+                    heart.remove();
+                }, 5000);
+            }, 300);
+        }
+    </script>
+</body>
+</html>
